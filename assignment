@@ -204,6 +204,7 @@ void fileDelete(FILE* fp, FILE* tempFile) {
 		}
 
 		char newBuffer[128] = "";  // 새로운 문자열을 저장할 공간
+		char printBuffer[128] = ""; // 매 단계에서 변경된 줄을 저장할 공간
 		char* start = buffer;
 		char* pos;
 		int modified = 0;  // 수정 여부 확인
@@ -213,7 +214,6 @@ void fileDelete(FILE* fp, FILE* tempFile) {
 				printf("\n[원본] (line %d): %s\n", lineNum, buffer);
 				modified = 1;
 			}
-
 
 			printf("'%s' 을(를) 삭제할까요? (y/n): ", target);
 			char choice;
@@ -227,10 +227,14 @@ void fileDelete(FILE* fp, FILE* tempFile) {
 				strncat(newBuffer, start, pos - start + strlen(target));  // 삭제 안 하면 포함
 			}
 
-			start = pos + strlen(target);  // 다음 위치로 이동
+			// printBuffer를 즉시 업데이트
+			strcpy(printBuffer, newBuffer);
+			strcat(printBuffer, pos + strlen(target));
 
 			// 변경된 줄을 출력
-			printf("[변경된 줄]: %s\n", newBuffer);
+			printf("[변경된 줄]: %s\n", printBuffer);
+
+			start = pos + strlen(target);  // 다음 위치로 이동
 		}
 
 		strcat(newBuffer, start);  // 마지막 남은 부분 추가
@@ -282,6 +286,7 @@ void fileUpdate(FILE* fp, FILE* tempFile) {
 		}
 
 		char newBuffer[128] = "";  // 새로운 문자열을 저장할 공간
+		char printBuffer[128] = ""; // 변경된 내용을 저장할 공간
 		char* start = buffer;
 		char* pos;
 		int modified = 0;  // 수정 여부 확인
@@ -305,10 +310,14 @@ void fileUpdate(FILE* fp, FILE* tempFile) {
 				strncat(newBuffer, start, pos - start + strlen(target));  // 변경하지 않고 포함
 			}
 
-			start = pos + strlen(target);  // 다음 위치로 이동
+			// printBuffer를 즉시 업데이트
+			strcpy(printBuffer, newBuffer);
+			strcat(printBuffer, pos + strlen(target));
 
 			// 변경된 줄을 출력
-			printf("[변경된 줄]: %s\n", newBuffer);
+			printf("[변경된 줄]: %s\n", printBuffer);
+
+			start = pos + strlen(target);  // 다음 위치로 이동
 		}
 
 		strcat(newBuffer, start);  // 마지막 남은 부분 추가
@@ -323,6 +332,7 @@ void fileUpdate(FILE* fp, FILE* tempFile) {
 
 	printf("변경 작업이 완료되었습니다.\n");
 }
+
 
 
 
